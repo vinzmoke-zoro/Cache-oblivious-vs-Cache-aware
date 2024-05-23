@@ -71,7 +71,7 @@ void trans(int M, int N, int A[N][M], int B[M][N])
 }
 
 /*
- * registerFunctions - This function registers transpose
+ * registerFunctions - This function registers the transpose
  *     functions with the driver.  At runtime, the driver will
  *     evaluate each of the registered functions and summarize their
  *     performance. This is a handy way to experiment with different
@@ -79,7 +79,7 @@ void trans(int M, int N, int A[N][M], int B[M][N])
  */
 void registerFunctions()
 {
-    // Register solution function
+    // Register the solution function
     registerTransFunction(transpose_submit, transpose_submit_desc);
 
     // Register any additional transpose functions
@@ -88,8 +88,7 @@ void registerFunctions()
 
 /*
  * is_transpose - This helper function checks if B is the transpose of
- *     A. You can check the correctness of your transpose by calling
- *     it before returning from the transpose function.
+ *     A.
  */
 int is_transpose(int M, int N, int A[N][M], int B[M][N])
 {
