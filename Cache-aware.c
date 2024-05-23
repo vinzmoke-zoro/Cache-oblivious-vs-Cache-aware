@@ -78,7 +78,7 @@ void registerFunctions()
     // Registers the solution function
     registerTransFunction(transpose_submit, transpose_submit_desc);
 
-    // Register any additional transpose functions
+    // Registers any additional transpose functions
     registerTransFunction(trans, trans_desc);
 }
 
