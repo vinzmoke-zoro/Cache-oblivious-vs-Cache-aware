@@ -25,3 +25,8 @@ The cache-aware algorithm, in contrast, is optimized with specific knowledge of 
 ### Adaptability
 - **Cache-Oblivious Algorithm**: Highly adaptable and can be used in various environments without modification.
 - **Cache-Aware Algorithm**: Requires knowledge of the cache architecture to achieve optimal performance, which can limit its adaptability across different systems.
+#### Performance Metric:
+<img src="https://github.com/vinzmoke-zoro/Cache-oblivious-vs-Cache-aware/assets/63388102/d86b2161-8cb4-4655-b8ff-d94b92b55e94" alt="Top Image" style="width: 49%;">
+<img src="https://github.com/vinzmoke-zoro/Cache-oblivious-vs-Cache-aware/assets/63388102/119c07af-399d-49e4-bbce-8d08d48227f2" alt="Bottom Image" style="width: 49%;">
+<br>
+As seen from the performance metric, Cache-oblivious algorithms are versatile and do not require detailed cache information, making them suitable for a wide range of applications. However, they may not achieve the highest possible performance in specific cache configurations. Cache-aware algorithms, on the other hand, can be highly optimized for specific cache architectures, leading to better performance in those scenarios. The choice between the two approaches depends on the specific requirements and constraints of the application at hand.
