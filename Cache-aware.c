@@ -17,21 +17,99 @@ int is_transpose(int M, int N, int A[N][M], int B[M][N]);
 
 // Cache-aware transpose function for 32x32, 64x64, and 61x67 matrices
 void cache_aware_transpose(int M, int N, int A[N][M], int B[M][N]) {
-    int block_size = 8; // Choosing a block size that fits well in the cache
+    int row, col, i, j;
+    int temp1, temp2, temp3, temp4, temp5, temp6, temp7, temp8;
+    // Optimize for 32x32 matrix using 8x8 blocks
+    if (M == 32) {
+        for (row = 0; row < N; row += 8) {
+            for (col = 0; col < M; col += 8) {
+                for (i = row; i < row + 8; ++i) {
+                    temp1 = A[i][col];
+                    temp2 = A[i][col + 1];
+                    temp3 = A[i][col + 2];
+                    temp4 = A[i][col + 3];
+                    temp5 = A[i][col + 4];
+                    temp6 = A[i][col + 5];
+                    temp7 = A[i][col + 6];
+                    temp8 = A[i][col + 7];
 
-    if (M == 32 && N == 32) {
-        block_size = 8;
-    } else if (M == 64 && N == 64) {
-        block_size = 4;
-    } else if (M == 61 && N == 67) {
-        block_size = 8;
+                    B[col][i] = temp1;
+                    B[col + 1][i] = temp2;
+                    B[col + 2][i] = temp3;
+                    B[col + 3][i] = temp4;
+                    B[col + 4][i] = temp5;
+                    B[col + 5][i] = temp6;
+                    B[col + 6][i] = temp7;
+                    B[col + 7][i] = temp8;
+                }
+            }
+        }
     }
+    // Optimize for 64x64 matrix using a combination of 4x4 and 8x8 blocks
+    else if (M == 64) {
+        for (row = 0; row < N; row += 8) {
+            for (col = 0; col < M; col += 8) {
+                for (i = row; i < row + 4; ++i) {
+                    temp1 = A[i][col];
+                    temp2 = A[i][col + 1];
+                    temp3 = A[i][col + 2];
+                    temp4 = A[i][col + 3];
+                    temp5 = A[i][col + 4];
+                    temp6 = A[i][col + 5];
+                    temp7 = A[i][col + 6];
+                    temp8 = A[i][col + 7];
 
-    for (int i = 0; i < N; i += block_size) {
-        for (int j = 0; j < M; j += block_size) {
-            for (int k = i; k < i + block_size && k < N; k++) {
-                for (int l = j; l < j + block_size && l < M; l++) {
-                    B[l][k] = A[k][l];
+                    B[col][i] = temp1;
+                    B[col][i + 4] = temp5;
+                    B[col + 1][i] = temp2;
+                    B[col + 1][i + 4] = temp6;
+                    B[col + 2][i] = temp3;
+                    B[col + 2][i + 4] = temp7;
+                    B[col + 3][i] = temp4;
+                    B[col + 3][i + 4] = temp8;
+                }
+                for (j = col; j < col + 4; ++j) {
+                    temp1 = B[j][row + 4];
+                    temp2 = B[j][row + 5];
+                    temp3 = B[j][row + 6];
+                    temp4 = B[j][row + 7];
+                    temp5 = A[row + 4][j];
+                    temp6 = A[row + 5][j];
+                    temp7 = A[row + 6][j];
+                    temp8 = A[row + 7][j];
+
+                    B[j][row + 4] = temp5;
+                    B[j][row + 5] = temp6;
+                    B[j][row + 6] = temp7;
+                    B[j][row + 7] = temp8;
+                    B[j + 4][row] = temp1;
+                    B[j + 4][row + 1] = temp2;
+                    B[j + 4][row + 2] = temp3;
+                    B[j + 4][row + 3] = temp4;
+                }
+                for (i = row + 4; i < row + 8; ++i) {
+                    temp1 = A[i][col + 4];
+                    temp2 = A[i][col + 5];
+                    temp3 = A[i][col + 6];
+                    temp4 = A[i][col + 7];
+
+                    B[col + 4][i] = temp1;
+                    B[col + 5][i] = temp2;
+                    B[col + 6][i] = temp3;
+                    B[col + 7][i] = temp4;
+                }
+            }
+        }
+    }
+    // General case using block size of 16x16
+    else {
+        const int block_size = 16;
+        for (row = 0; row < N; row += block_size) {
+            for (col = 0; col < M; col += block_size) {
+                for (i = row; i < row + block_size && i < N; ++i) {
+                    for (j = col; j < col + block_size && j < M; ++j) {
+                        B[j][i] = A[i][j];
+                    }
                 }
             }
         }
